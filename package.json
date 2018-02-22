@@ -1,8 +1,8 @@
 {
-  "name": "vue-chrome-extension-example",
+  "name": "chromext",
   "private": true,
-  "version": "0.0.0",
-  "description": "chrome extesion with vue",
+  "version": "0.0.1",
+  "description": "stock chrome extesion with vue",
   "scripts": {
     "start": "npm run dev:chrome",
     "build": "npm run build:chrome",
@@ -61,6 +61,8 @@
     "yargs": "5.x.x"
   },
   "dependencies": {
-    "bulma": "^0.3.2"
+    "bulma": "^0.6.2",
+    "firebase": "^4.10.0",
+    "vuefire": "^1.4.5"
   }
 }

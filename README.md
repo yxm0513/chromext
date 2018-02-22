@@ -1,6 +1,6 @@
 # vue chrome extension example
 
-develop chrome extension with vue
+my personal chrome to help stock
 
 ## Installation
 
