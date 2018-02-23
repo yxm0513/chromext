@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import App from '../component/app.vue';
 
-import VueFire from 'vuefire'
-
-Vue.use(VueFire)
+Vue.component('notification', require('vue-bulma-notifications'))
 
 var app=new Vue({
   el:'#app',

@@ -1,5 +1,5 @@
 <template lang="html">
-  <table class="table is-striped" id="zixuan">
+  <table class="table is-striped" id="jixuan">
       <thead>
           <tr>
               <th>名称(代码)</th>
