@@ -3,17 +3,7 @@
     <tabs>
       <tab name="持仓/自选" :selected="true">
         <div class="columns">
-          <div class="column">
-                <div class="field has-addons">
-                  <div class="control">
-                    <input class="input" type="text" placeholder="代码/名称/拼音">
-                  </div>
-                  <div class="control">
-                    <a class="button is-primary">搜索</a>
-                  </div>
-                </div>
-          </div>
-          <vue-instant
+          <search
           :suggestion-attribute="suggestionAttribute"
           v-model="value"
           :disabled="false"
@@ -30,10 +20,8 @@
           :show-autocomplete="true"
           :autofocus="false"
           :suggestions="suggestions"
-          name="customName"
-          placeholder="custom placeholder"
-          type="spotify">
-          </vue-instant>
+          name="customName">
+        </search>
         </div>
         <zixuan></zixuan>
       </tab>
@@ -57,6 +45,7 @@ import zixuan from './zixuan.vue';
 import jixuan from './jixuan.vue';
 import notify from './notify.vue';
 import settings from './settings.vue';
+import search from './search.vue'
 import axios from 'axios'
 
 export default {
@@ -113,11 +102,11 @@ export default {
     zixuan: zixuan,
     jixuan: jixuan,
     notify: notify,
-    settings: settings
+    settings: settings,
+    search:search
   }
 }
 </script>
 
 <style lang="css">
-@import '../../node_modules/vue-instant/dist/vue-instant.css'
 </style>

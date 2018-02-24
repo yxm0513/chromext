@@ -1,9 +1,11 @@
 <template lang="html">
+  <div>
   <div v-for="item in items">
-    <notification remember="true">
+    <notification>
         {{item.message}}
     </notification>
   </div>
+</div>
 </template>
 
 <script>

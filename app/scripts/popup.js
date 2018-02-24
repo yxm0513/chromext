@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from '../component/app.vue'
-import VueInstant from 'vue-instant'
-Vue.use(VueInstant)
+// import VueInstant from 'vue-instant'
+// Vue.use(VueInstant)
 
 Vue.component('notification', require('vue-bulma-notifications'))
 
