@@ -61,7 +61,9 @@
     "yargs": "5.x.x"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "bulma": "^0.6.2",
-    "vue-bulma-notifications": "^2.1.2"
+    "vue-bulma-notifications": "^2.1.2",
+    "vue-instant": "^1.0.2"
   }
 }
