@@ -3,6 +3,7 @@
     <tabs>
       <tab name="持仓/自选" :selected="true">
         <div class="columns">
+          <div class="column">
           <search
           :suggestion-attribute="suggestionAttribute"
           v-model="value"
@@ -22,6 +23,7 @@
           :suggestions="suggestions"
           name="customName">
         </search>
+        </div>
         </div>
         <zixuan></zixuan>
       </tab>
@@ -66,6 +68,7 @@ export default {
     },
     selected: function() {
       this.selectedEvent = 'selection changed'
+      console.log('')
     },
     enter: function() {
       this.selectedEvent = 'enter'
@@ -88,11 +91,27 @@ export default {
     changed: function() {
       var that = this
       this.suggestions = []
-      axios.get('https://api.themoviedb.org/3/search/movie?api_key=342d3061b70d2747a1e159ae9a7e9a36&query=' + this.value)
+      axios.get('http://smartbox.gtimg.cn/s3/?t=all&q=' + this.value)
         .then(function(response) {
-          response.data.results.forEach(function(a) {
-            that.suggestions.push(a)
-          })
+          var text = "{\"" + response.data.replace("=", "\":") + "}"
+          if (!!text) {
+            var obj = JSON.parse(text)
+            text = obj.v_hint
+            var list = text.split("^")
+            list = list.map(row => row.split("~"))
+            /*[
+                ["sh","600555","\u4e5d\u9f99\u5c71","jls","GP-A"],
+                ["us","s.n","\u65af\u666e\u6797\u7279","splt","GP"]
+            ]*/
+
+            list.forEach(function(a) {
+              console.log(a)
+              if(!/^(sz|sh)$/.test(a[0])){
+                return true
+              }
+              that.suggestions.push(a)
+            })
+          }
         })
     }
   },
@@ -103,7 +122,7 @@ export default {
     jixuan: jixuan,
     notify: notify,
     settings: settings,
-    search:search
+    search: search
   }
 }
 </script>

@@ -1,27 +1,35 @@
 <template>
 <div>
-    <div class="main">
-    <form novalidate="novalidate" onsubmit="return false;">
+    <form onsubmit="return false;">
       <div class="field has-addons">
         <div class="control">
-          <input class="input" :disabled="disabled" @click="emitClickInput" @keyup='changeText' v-model='textVal' type="text" :name="name" placeholder="代码/名称/拼音" autocomplete="off" required="required" :class="getClassInput" :autofocus="autofocus">
+          <input
+          class="input"
+          :disabled="disabled"
+          @keyup='changeText'
+          v-model='textVal'
+          type="search"
+          :name="name"
+          placeholder="代码/名称/拼音"
+          required="required"
+          :autofocus="autofocus">
           <div>
             <ul v-on-clickaway="away" v-if="suggestionsIsVisible && showSuggestions" class="select_suggestions">
-                <li @click="selectedAction(index)" v-for="(item, index) in similiarData">{{item[suggestionAttribute]}}</li>
+                <li @click="selectedAction(index)" v-for="(item, index) in similiarData">
+                  <div>
+                    <span v-for="(e, i) in item " class="search_element" v-if="i==1 || i==2 || i==3">
+                    {{e}}
+                    </span>
+                  </div>
+                </li>
             </ul>
          </div>
         </div>
         <div class="control">
-          <a  class="button is-white has-text-grey" @click="reset"> <i class="fa fa-window-close"></i></a>
-        </div>
-        <div class="control">
           <a class="button is-primary" @click="emitClickButton" type="submit">搜索</a>
         </div>
-
-
       </div>
     </form>
-
 </div>
 </template>
 <script>
@@ -48,7 +56,7 @@
       },
       'minMatch': {
         type: Number,
-        default: 2
+        default: 1
       },
       'name': {
         type: String,
@@ -73,7 +81,7 @@
         inputChanged: false,
         suggestionsIsVisible: true,
         highlightedIndex: 0,
-        highlightedIndexMax: 7,
+        highlightedIndexMax: 1000,
         similiarData: [],
         placeholderVal: this.placeholder,
       }
@@ -156,18 +164,14 @@
         this.emitSelected()
       },
       addRegister (o) {
-        if (this.isSimilar(o) && this.textValIsNotEmpty()) {
           this.addSuggestion(o)
-        }
       },
       addSuggestion (o) {
-        if (!this.findSuggestionTextIsRepited(o)) {
           this.addToSimilarData(o)
-        }
       },
       addToSimilarData (o) {
         if (this.canAddToSimilarData()) {
-          this.placeholderVal = this.letterProcess(o)
+          //this.placeholderVal = this.letterProcess(o)
           this.selectedSuggest = o
           this.emitSelected()
           this.similiarData.unshift(o)
@@ -186,6 +190,7 @@
         this.textVal = this.value
       },
       setFinalTextValue () {
+        console.log("simon1");
         if (this.finalTextValueValidation()) {
           this.setPlaceholderAndTextVal()
           this.emitChange()
@@ -195,6 +200,7 @@
       },
       setPlaceholderAndTextVal () {
         if (typeof this.similiarData[this.highlightedIndex] !== 'undefined') {
+          console.log("simon3");
           var suggest = this.similiarData[this.highlightedIndex]
           this.placeholderVal = suggest[this.suggestionAttribute]
           this.textVal = suggest[this.suggestionAttribute]
@@ -226,6 +232,7 @@
       },
       findSuggests () {
         if (this.suggestionsPropIsDefined()) {
+          console.log("simon3");
           this.suggestions.forEach(this.addRegister)
         }
       },
@@ -251,6 +258,8 @@
         return this.similiarData.find(this.findRepited.bind(this, o))
       },
       finalTextValueValidation () {
+        console.log("simon2 " + this.highlightedIndex);
+        console.log(typeof this.similiarData[this.highlightedIndex]);
         return typeof this.similiarData[this.highlightedIndex] !== 'undefined' ||
             this.placeholderVal === '' && this.highlightedIndex !== 0
       },
@@ -260,9 +269,6 @@
                   .toLowerCase()
                   .startsWith(this.textVal.toLowerCase())
         }
-      },
-      isSameType (o) {
-        return o.name === this.type
       },
       fnExists (fnName) {
         return typeof fnName === 'function'
@@ -348,7 +354,7 @@
         this.emitSelected()
       },
       emitChange () {
-        // this.$emit('input', this.textVal)
+        this.$emit('input', this.textVal)
       },
       emitClickInput (event) {
         this.$emit('click-input', event)
@@ -375,6 +381,7 @@
         this.$emit('escape')
       },
       emitSelected () {
+        console.log("simon4");
         this.$emit('selected', this.selectedSuggest)
       }
     }
@@ -400,23 +407,9 @@
      box-shadow: 0 0 6px 0 rgba(0,0,0,.04), 0 2px 4px 0 rgba(0,0,0,.12);
      margin-top:3px;
  }
-
- .search_reset {
-   display: none;
-   position: absolute;
-   top: 3px;
-   right: 41px;
-   margin: 0;
-   border: 0;
-   background: none;
-   cursor: pointer;
-   padding: 0;
-   font-size: inherit;
-   -webkit-user-select: none;
-      -moz-user-select: none;
-       -ms-user-select: none;
-           user-select: none;
-   fill: rgba(0, 0, 0, 0.5);
+ .search_element {
+   min-width: 80px;
+   display: block;
+   float: left;
  }
-
 </style>

@@ -12,8 +12,8 @@
           </tr>
       </thead>
       <tbody>
-          <tr v-for="item in items">
-            <td> {{ item.message }} </td>
+          <tr v-for="item in items" v-model="items">
+            <td> {{ item.name }} </td>
             <td> {{ item.price }} </td>
             <td> {{ item.price }} </td>
             <td> {{ item.price }} </td>
@@ -26,14 +26,45 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data () {
   return {
       items: [
-        { message: 'Foo', price: 1 },
-        { message: 'Bar', price: 2 , selected: 'yes'}
-      ]
+        { name: 'Foo', price: 1 },
+        { name: 'Bar', price: 2 , selected: 'yes'}
+      ],
+      ret: ''
     }
+  },
+  methods: {
+    loadData: function (){
+      var date = Date();
+      axios.get('http://sqt.gtimg.cn/utf8/q=sh600352&_t=' + (+new Date()))
+        .then(function(response) {
+            var stocks = response.data.split("=")[1]
+            var arr = stocks.split("~")
+            var temp = {
+  						name : arr[1],
+  						code : arr[2],
+  						price : arr[3],
+  						growRate : arr[32] + '%',
+  						hands : (arr[38] ? arr[38] : '0.00') + '%',
+  						className : ''
+  					}
+            this.ret = temp
+        })
+    }
+  },
+  mounted() {
+    //this.items.push(this.loadData())
+    this.loadData()
+    console.log(this.ret)
+    console.log(this.loadData())
+    // var self=this
+    // this.timer = setInterval(function(){
+    //   self.items.push(self.loadData())
+    // }, 1000)
   }
 }
 </script>
