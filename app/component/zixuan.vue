@@ -28,43 +28,57 @@
 <script>
 import axios from 'axios'
 export default {
-  data () {
-  return {
-      items: [
-        { name: 'Foo', price: 1 },
-        { name: 'Bar', price: 2 , selected: 'yes'}
-      ]
+  data() {
+    return {
+      items: [],
+      code: []
     }
   },
   methods: {
-    loadData: function (){
-      var date = Date();
+    getzixuan: function() {
       var that = this;
-      axios.get('http://sqt.gtimg.cn/utf8/q=sh600352&_t=' + (+new Date()))
-        .then(function(response) {
-            var stocks = response.data.split("=")[1]
-            var arr = stocks.split("~")
-            var temp = {
-  						name : arr[1],
-  						code : arr[2],
-  						price : arr[3],
-  						growRate : arr[32] + '%',
-  						hands : (arr[38] ? arr[38] : '0.00') + '%',
-  						className : ''
-  					}
-            console.log(temp)
-            that.items.push(temp)
+      axios.get('http://localhost:3000/api/v1/zixuan').then(function(response) {
+        var code = response.data
+        console.log(code)
+        code.forEach(function(element) {
+          that.code.push(element.code)
         })
+      })
+
+    },
+    loadData: function() {
+      var query = this.code.join(',')
+      var date = Date();
+      var update = []
+      axios.get('http://sqt.gtimg.cn/utf8/q=' + query + '&_t=' + (+new Date()))
+        .then(function(response) {
+          var stocks = response.data.split(";")
+          stocks.forEach(function(stock) {
+            if(/~/.test(stock)){
+              var values = stock.split("=")[1]
+              var arr = values.split("~")
+              var temp = {
+                name: arr[1],
+                code: arr[2],
+                price: arr[3],
+                growRate: arr[32] + '%',
+                hands: (arr[38] ? arr[38] : '0.00') + '%',
+                className: ''
+              }
+              update.push(temp)
+          }
+          })
+        })
+        this.items=update
     }
   },
   mounted() {
-    //this.items.push(this.loadData())
+    this.getzixuan()
     this.loadData()
-    console.log(this.items)
-    var self=this
-    this.timer = setInterval(function(){
+    var self = this
+    this.timer = setInterval(function() {
       self.loadData()
-    }, 1000)
+    }, 3000)
   }
 }
 </script>
